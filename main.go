@@ -1,20 +1,20 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"os"
+
+	api "github.com/mauricioacevedo/go_vercel/api"
 )
 
 const (
-	DEFAULT_PORT    = "8080"
-	DEFAULT_MESSAGE = "test message"
+	DEFAULT_PORT = "8080"
 )
 
 func main() {
 	port := getPort()
 
-	http.HandleFunc("/hello", helloHandler)
+	http.HandleFunc("/hello", api.HelloHandler)
 	http.ListenAndServe(":"+port, nil)
 }
 
@@ -24,22 +24,4 @@ func getPort() string {
 	}
 
 	return DEFAULT_PORT
-}
-
-func getMessage() string {
-	if message := os.Getenv("MESSAGE"); message != "" {
-		return message
-	}
-
-	return DEFAULT_MESSAGE
-}
-
-func helloHandler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/hello" {
-		http.NotFound(w, r)
-		return
-	}
-
-	w.Header().Set("Content-Type", "text/plain")
-	fmt.Fprintf(w, "Hello "+getMessage())
 }

@@ -7,7 +7,8 @@ import (
 )
 
 const (
-	DEFAULT_PORT = "8080"
+	DEFAULT_PORT    = "8080"
+	DEFAULT_MESSAGE = "test message"
 )
 
 func main() {
@@ -25,6 +26,14 @@ func getPort() string {
 	return DEFAULT_PORT
 }
 
+func getMessage() string {
+	if message := os.Getenv("MESSAGE"); message != "" {
+		return message
+	}
+
+	return DEFAULT_MESSAGE
+}
+
 func helloHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/hello" {
 		http.NotFound(w, r)
@@ -32,5 +41,5 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "text/plain")
-	fmt.Fprintf(w, "Hello api gateway test!\n")
+	fmt.Fprintf(w, "Hello "+getMessage())
 }
